@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketch</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+  </head>
+  <body>
+    <div style="display: flex; min-height: 90vh;">
+      <!-- 左側操作區 -->
+      <div id="left-panel" style="width: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;">
+        <!-- 使用說明 -->
+        <div id="usage-box" style="background: #fffde7; border: 1px solid #ccc; border-radius: 8px; padding: 16px 18px; width: 90%; font-size: 16px; color: #333;">
+          <b>操作方式：</b><br>
+          選擇年級後，選單內拖曳老師名字與課堂放置於課表內。<br>
+          倒退（回到上一步）<br>
+          還原（還原到上一步）<br>
+          如果想改變科目與老師的設置，也可直接將該科目或老師名字拉出課表或拉到其他需要的課堂上。
+        </div>
+        <!-- 老師下拉選單 -->
+        <div class="dropdown" id="teacher-dropdown" style="width: 90%;">
+          <button style="width: 100%;" onclick="toggleDropdown('teacher-dropdown')">選擇老師 ▼</button>
+          <div class="dropdown-content" id="teacher-dropdown-content"></div>
+        </div>
+        <!-- 科目下拉選單 -->
+        <div class="dropdown" id="subject-dropdown" style="width: 90%;">
+          <button style="width: 100%;" onclick="toggleDropdown('subject-dropdown')">選擇科目 ▼</button>
+          <div class="dropdown-content" id="subject-dropdown-content"></div>
+        </div>
+        <!-- 倒退/還原按鈕 -->
+        <div style="margin-top: 8px;">
+          <button onclick="undo()">倒退</button>
+          <button onclick="redo()">還原</button>
+        </div>
+      </div>
+      <!-- 右側課表區 -->
+      <div id="right-panel" style="flex:1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <!-- 年級按鈕 -->
+        <div id="grade-tabs" style="display: flex; justify-content: center; margin-bottom: 16px; width: 700px;">
+          <button onclick="setGrade(0)">一年級</button>
+          <button onclick="setGrade(1)">二年級</button>
+          <button onclick="setGrade(2)">三年級</button>
+          <button onclick="setGrade(3)">四年級</button>
+          <button onclick="setGrade(4)">五年級</button>
+          <button onclick="setGrade(5)">六年級</button>
+        </div>
+        <!-- 課表canvas -->
+        <div id="canvas-holder"></div>
+      </div>
+    </div>
+    <script src="sketch.js"></script>
+    <script>
+      function setupTeacherPanel() {
+        const teacherSelect = document.getElementById('teacher-select');
+        const teacherList = document.getElementById('teacher-list');
+        teacherList.innerHTML = '';
+        let filter = teacherSelect.value;
+        teachers.filter(name => !filter || name === filter).forEach(name => {
+          let div = document.createElement('div');
+          div.innerText = name;
+          div.className = 'draggable-teacher';
+          div.style.cursor = 'grab';
+          div.draggable = true;
+          div.ondragstart = (e) => {
+            draggingTeacher = name;
+            e.dataTransfer.setData('text/plain', name);
+          };
+          teacherList.appendChild(div);
+        });
+      }
+
+      function setupSubjectPanel() {
+        const subjectSelect = document.getElementById('subject-select');
+        const subjectList = document.getElementById('subject-list');
+        subjectList.innerHTML = '';
+        let filter = subjectSelect.value;
+        subjects.filter(sub => sub.name.startsWith(grades[currentGrade]))
+          .filter(sub => !filter || sub.name.endsWith(filter))
+          .forEach((sub) => {
+            let div = document.createElement('div');
+            div.innerText = `${sub.name.replace(grades[currentGrade], '')} (${sub.count})`;
+            div.className = 'draggable-subject';
+            div.style.cursor = 'grab';
+            div.draggable = true;
+            div.ondragstart = (e) => {
+              draggingSubject = sub.name;
+              e.dataTransfer.setData('text/plain', sub.name);
+            };
+            subjectList.appendChild(div);
+          });
+      }
+    </script>
+  </body>
+</html>

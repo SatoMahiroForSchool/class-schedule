@@ -1,0 +1,94 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #fff8e1; /* 溫暖的淡橘米黃色 */
+}
+
+canvas {
+  display: block;
+}
+
+.draggable-teacher, .draggable-subject {
+  background: #fffde7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  width: 80px;
+  text-align: center;
+  user-select: none;
+  border: 1px solid #ccc;
+}
+
+.draggable-subject.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5e0e0;
+  display: block;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.dropdown-content .draggable-subject {
+  padding: 8px 12px;
+  cursor: grab;
+  border-bottom: 1px solid #eee;
+  background: #fffde7;
+}
+.dropdown-content .draggable-subject:last-child {
+  border-bottom: none;
+}
+.dropdown.show .dropdown-content {
+  display: block;
+}
+
+#grade-tabs button {
+  margin: 0 8px;
+  padding: 6px 16px;
+  font-size: 16px;   /* 字體稍小 */
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  background: #f5f5f5;
+  cursor: pointer;
+  min-width: 70px;
+  white-space: nowrap; /* 防止自動換行 */
+}
+#grade-tabs button.active {
+  background: #4caf50;
+  color: #fff;
+  border: 1px solid #388e3c;
+}
+#dropdown-panel {
+  min-width: 180px;
+}
+
+#left-panel {
+  gap: 24px;
+}
+
+#usage-box {
+  background: #fffde7;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px 18px;
+  width: 90%;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
